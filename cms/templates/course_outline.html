@@ -1,0 +1,24 @@
+<%inherit file="course_outline.html" />
+<%! from openedx.core.djangolib.js_utils import js_escaped_string, dump_js_escaped_json %>
+
+<%block name="requirejs">
+    require(["icons/js/factories/outline"], function (OutlineFactory) {
+        OutlineFactory(
+            ${course_structure | n, dump_js_escaped_json},
+            ${initial_state | n, dump_js_escaped_json}
+        );
+    });
+</%block>
+
+<%block name="header_extras">
+    ${parent.header_extras()}
+
+    <%namespace name='static' file='static_content.html'/>
+    <% additional_templates = ['icon-editor'] %>
+
+    % for template_name in additional_templates:
+        <script type="text/template" id="${template_name}-tpl">
+            <%static:include path="js/${template_name}.underscore" />
+        </script>
+    % endfor
+</%block>
